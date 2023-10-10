@@ -1,9 +1,10 @@
-import { Body, Controller, Get, Post } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post, Put } from "@nestjs/common";
 import { CreateUserDTO } from "./dto/create-user.dto";
 import { UserEntity } from "./user.entity";
 import { UserRepository } from "./user.repository";
 import {v4 as uuid} from 'uuid';
 import { ListUserDTO } from "./dto/list-user.dto";
+import { UpdateUserDTo } from "./dto/update-user.dto";
 
 
 @Controller('/users')
@@ -22,7 +23,8 @@ export class UserController {
         this.userRepository.save(userEntity);
         return {
             user: new ListUserDTO(userEntity.id, userEntity.name), 
-            message: 'User created with success!'};
+            message: 'User created with success!'
+        };
     }
 
     @Get()
@@ -36,5 +38,16 @@ export class UserController {
         );
 
         return usersList;
+    }
+
+    //Informamos a rota e o local onde é para pegar que no caso é a url - Param
+    @Put('/:id')
+    async updateUser (@Param('id') id: string, @Body() dataUpdate: UpdateUserDTo ) {
+        const userUpdate = await this.userRepository.update(id, dataUpdate);
+
+        return{
+            user: userUpdate,
+            message:'User updated with success.'
+        }
     }
 }

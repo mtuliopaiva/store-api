@@ -25,22 +25,33 @@ export class UserRepository{
         return possibleUser !== undefined;
     }
 
-    //recebe o id e um parcial de user entity
-    async update(id: string, updateData: Partial<UserEntity>){
-
+    private searchForId(id: string){
         const findUser = this.users.find(
             userSaved => userSaved.id === id
         );
         if(!findUser){
             throw new Error('User dont exists.');
         }
+        return findUser;
+    }
+    //recebe o id e um parcial de user entity
+    async update(id: string, updateData: Partial<UserEntity>){
+        const user = this. searchForId(id);
         Object.entries(updateData).forEach(([key, value]) => {
             if(key === id){
                 return;
             };
-            findUser[key] = value;
+            user[key] = value;
         });
-        return findUser;
+        return user;
 
+    }
+
+    async remove(id:string){
+        const user = this. searchForId(id);
+        this.users = this.users.filter(
+            userSaved => userSaved.id !==id
+            );
+        return user;
     }
 }

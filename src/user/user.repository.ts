@@ -1,4 +1,5 @@
 import { Injectable } from "@nestjs/common";
+import { UserEntity } from "./user.entity";
 
 //Injectable - Este decorador é usado para marcar uma classe como um 
 //serviço injetável no Nest.js. Os serviços são usados 
@@ -7,9 +8,9 @@ import { Injectable } from "@nestjs/common";
 //Agora ele é um provider, com isso sera criado o objeto de forma automática
 @Injectable()
 export class UserRepository{
-    private users = [];
+    private users: UserEntity[] = [];
 
-    async save(user){
+    async save(user: UserEntity){
         this.users.push(user);
     }
 
